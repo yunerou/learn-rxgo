@@ -68,9 +68,13 @@ func main() {
 			// 	return customer.ID
 			// }),
 			rxgo.WithBufferedChannel(3)).
+		BufferWithTimeOrCount(rxgo.WithDuration(3*time.Second), 2).
 		ForEach(
 			func(item interface{}) {
-				fmt.Printf("next: %v\n", item)
+				for _, i := range item.([]interface{}) {
+					fmt.Printf("next: %T :: %v\n", i, i)
+				}
+
 			}, func(err error) {
 				fmt.Printf("error: %v\n", err)
 			}, func() {
@@ -86,3 +90,14 @@ func main() {
 	// 	fmt.Println("Customer are :: ", item.V)
 	// }
 }
+
+// ForEach(
+// 	func(item interface{}) {
+// 			if a, ok := item.(*Customer); ok {
+// 					fmt.Printf("next: %T :: %v\n", a, a)
+// 			}
+// 	}, func(err error) {
+// 			fmt.Printf("error: %v\n", err)
+// 	}, func() {
+// 			fmt.Println("done")
+// 	})
